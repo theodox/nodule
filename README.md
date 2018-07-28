@@ -88,10 +88,10 @@ and Add or remove them from channel box:
 
 Most nodule properties are just translations of calls to `getAttr` and `setAttr`.  However nodules that wrap Maya transform nodes have special properties to make it easier to do common jobs.  There are local and worldspace versions of the following properties:
 
-`local_position` and `world_position` get or set the object's position
-`local_rotation` and `world_rotation` get or set rotation
-`local_scale` and `world_scale` get the scale.  Maya does not allow you to set world scale directly, however, so `world_scale` is read-only. 
-`local_matrix` and `world_matrix`  get and set the node matrix
+* `local_position` and `world_position` get or set the object's position
+* `local_rotation` and `world_rotation` get or set rotation
+* `local_scale` and `world_scale` get the scale.  Maya does not allow you to set world scale directly, however, so `world_scale` is read-only. 
+* `local_matrix` and `world_matrix`  get and set the node matrix
 
 There are also `local_rotate_pivot`, `local_scale_pivot`, `world_rotate_pivot` and `world_scale_pivot`
 
