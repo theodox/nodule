@@ -594,7 +594,8 @@ class Nodule(str):
     """
 
     # this masks the fact that vanilla strings have a translate method, which
-    # we may need for the maya 'translate' property
+    # we may need for the maya 'translate' property.  This does mean that
+    # non-transform nodes may try to call 'translate'
     _translate = str.translate
     translate = make_descriptor('translate', 'double3Linear')
 
@@ -615,6 +616,32 @@ class Nodule(str):
             return cmds.ls(self, uuid=True)[0]
         except IndexError:
             return None
+
+    def add_attribute(self, name, **kwargs):
+        """
+        adds an attribute named 'name' with the same keyword args as cmds.addAttr
+        """
+        kwargs['ln'] = name      # supplied is always the 'long' name
+
+        if 'longName' in kwargs:
+            del kwargs['longName']    # avoid duplicates
+        cmds.addAttr(self, **kwargs)
+        return self.get_named_attr(name)
+
+    def delete_attribute(self, name):
+        cmds.deleteAttr(".".join(self, name))
+
+    def get_named_attribute(self, attrib_name):
+        """
+        get an attribute value using a string name known only at runtime
+        """
+        return self.__getattr__(attrib_name)
+
+    def set_named_attribute(self, attrib_name, value):
+        """
+        set an attribute value using a string name known only at runtime
+        """
+        self.__setattr__(attrib_name, value)
 
     def __getattr__(self, name):
 
@@ -642,39 +669,13 @@ class Nodule(str):
 
         except ValueError as e:
             if e.message == 'need more than 0 values to unpack':
-                raise NoMayaAttributeError("'{}'' has no attribute '{}'".format(self, at_name))
+                raise NoMayaAttributeError("'{}' has no attribute '{}'".format(self, at_name))
             else:
                 raise
 
         self.LOOKUPS[at_name] = self.LOOKUPS[canonical] = make_descriptor(at_name, at_type)
 
         return self.LOOKUPS[at_name]
-
-    def add_attribute(self, name, **kwargs):
-        """
-        adds an attribute named 'name' with the same keyword args as cmds.addAttr
-        """
-        kwargs['ln'] = name      # supplied is always the 'long' name
-
-        if 'longName' in kwargs:
-            del kwargs['longName']    # avoid duplicates
-        cmds.addAttr(self, **kwargs)
-        return self.get_named_attr(name)
-
-    def delete_attribute(self, name):
-        cmds.deleteAttr(".".join(self, name))
-
-    def get_named_attribute(self, attrib_name):
-        """
-        get an attribute value using a string name known only at runtime
-        """
-        return self.__getattr__(attrib_name)
-
-    def set_named_attribute(self, attrib_name, value):
-        """
-        set an attribute value using a string name known only at runtime
-        """
-        self.__setattr__(attrib_name, value)
 
     def __repr__(self):
         if self.type:
