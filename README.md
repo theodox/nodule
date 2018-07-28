@@ -95,14 +95,14 @@ Most nodule properties are just translations of calls to `getAttr` and `setAttr`
 
 There are also `local_rotate_pivot`, `local_scale_pivot`, `world_rotate_pivot` and `world_scale_pivot`
 
-All of these attributes can be set with lists, tuples, or maya Vectors.  
+All of these attributes can be set with lists, tuples, or [Maya MVectors](https://knowledge.autodesk.com/search-result/caas/CloudHelp/cloudhelp/2018/ENU/Maya-SDK/py-ref/class-open-maya-1-1-m-vector-html.html).  
 
     my_nodule.world_position = 3,2,1
     my_nodule.world_position = (0,0,0)
     my_nodule.world_position = [-1,-1,-1]
     my_nodule.world_position = MVector(5.0, 4.0, 3.0)
 
-They return Maya vectors, so you can do vector or matrix math on the results.  MVectors also let you access x, y and z components by name:
+They return [Maya MVectors](https://knowledge.autodesk.com/search-result/caas/CloudHelp/cloudhelp/2018/ENU/Maya-SDK/py-ref/class-open-maya-1-1-m-vector-html.html), so you can do vector or matrix math on the results.  MVectors also let you access x, y and z components by name:
 
     my_nodule.local_position
     # Result: maya.api.OpenMaya.MVector(1, 2, 4) (pCube1.) # 
