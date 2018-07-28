@@ -225,9 +225,34 @@ class Connectable(object):
     def channelbox(self, val):
         cmds.setAttr(self._attribute, cb=val)
 
+    """
+    Maya's version of this is confusing -- you can be 'writeable',
+    'connectable' and 'locked' at the same time... need to decide
+    whether to reflect that or to rationalize it...
+    
+    @property
+    def writeable(self):
+        node, attr =self._attribute.split(".")
+        return cmds.attributeQuery(attr, node=node, w=True)
+    
+    @property
+    def connectable(self):
+        node, attr =self._attribute.split(".")
+        return cmds.attributeQuery(attr, node=node, connectable=True)
+    """
+
+
+    @property
+    def type(self):
+        node, attr =self._attribute.split(".")
+        return cmds.attributeQuery(attr, node=node, attributeType=True)
+
     @property
     def size(self):
         return cmds.getAttr(self._attribute, size=True)
+
+
+
 
 
 class NamedNumber(float, Connectable):
